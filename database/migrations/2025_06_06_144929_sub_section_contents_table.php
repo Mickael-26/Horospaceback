@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('sub_title')->nullable();
-            $table->string('paragraph')->nullable();
+            $table->text('paragraph')->nullable();
             $table->foreignId('section_content_id')->constrained()->onDelete('cascade');
             $table->foreignId('language_id')->constrained()->onDelete('cascade');
             $table->foreignId('zodiac_sign_id')->constrained()->onDelete('cascade');

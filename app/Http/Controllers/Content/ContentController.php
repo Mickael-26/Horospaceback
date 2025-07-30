@@ -46,7 +46,7 @@ class ContentController extends Controller
         $themes = $this->repo->getAllSlugTheme();
         $options = $this->sectionService->getSectionOptions();
         $subContents = $this->sectionService->getSubSectionOptions();
-        return view("content-style.content-style", compact('themes', 'options', 'subContents'));
+        return view('content-style.content-style', compact('themes', 'options', 'subContents'));
     }
     /**
      * Summary of update
@@ -103,7 +103,7 @@ class ContentController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return RedirectResponse
      */
-    public function updateSubSectionStyle(UpdateSubSectionStyleRequest $request)
+    public function updateSubSectionStyle(UpdateSubSectionStyleRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -148,7 +148,7 @@ class ContentController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return RedirectResponse
      */
-    public function addThemeSubSectionStyle(UpdateSubSectionStyleRequest $request)
+    public function addThemeSubSectionStyle(UpdateSubSectionStyleRequest $request): RedirectResponse
     {
 
         $data = $request->validated();
@@ -158,8 +158,8 @@ class ContentController extends Controller
         }
 
         SubSectionStyle::create([
-            'border_color_lucky_number' => $data["border_color_lucky_number"],
-            'color_list_dates' => $data["color_list_dates"],
+            'border_color_lucky_number' => $data['border_color_lucky_number'],
+            'color_list_dates' => $data['color_list_dates'],
             'color_list_numbers' => $data['color_list_numbers'],
             'color_lucky_number' => $data['color_lucky_number'],
             'color_sub_paragraph' => $data['color_sub_paragraph'],

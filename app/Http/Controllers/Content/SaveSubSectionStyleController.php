@@ -29,7 +29,7 @@ class SaveSubSectionStyleController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return RedirectResponse
      */
-    public function saveSubSectionStyle(UpdateSubSectionStyleRequest $request)
+    public function saveSubSectionStyle(UpdateSubSectionStyleRequest $request): RedirectResponse
     {
         $data = $request->validated();
 

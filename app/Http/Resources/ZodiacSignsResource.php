@@ -16,10 +16,10 @@ class ZodiacSignsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "img" => $this->img,
-            "languageCode" => Language::find($this->language_id)->code,
+            'id' => $this->id,
+            'name' => $this->name,
+            'img' => $this->img,
+            'languageCode' => Language::find($this->language_id)->code,
         ];
     }
 }

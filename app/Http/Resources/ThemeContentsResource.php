@@ -17,10 +17,10 @@ class ThemeContentsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
+            'id' => $this->id,
             'slug' => $this->slug,
-            "description" => $this->description,
-            "language" => Language::find($this->language_id)->code,
+            'description' => $this->description,
+            'language' => Language::find($this->language_id)->code,
         ];
     }
 }

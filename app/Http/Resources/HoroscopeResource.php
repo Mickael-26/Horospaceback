@@ -24,28 +24,28 @@ class HoroscopeResource extends JsonResource
         ];
         $languageId = $lang[$request->lang] ?? 1; 
         return [
-            "id" => $this->id,
-            "category" => new CategoryResource($this->category),
-            "medias" => new MediasResource($this->medias),
-            "introStyle" => IntroStylesResource::collection(
+            'id' => $this->id,
+            'category' => new CategoryResource($this->category),
+            'medias' => new MediasResource($this->medias),
+            'introStyle' => IntroStylesResource::collection(
                 $this->introContents->flatMap(function ($intro) {
                     return $intro->introStyles;
                 })
             ),
-            "zodiacSignStyle" => new ZodiacSignStylesResource($this->zodiacSignStyle),
-            "formContactStyle" => new FormContactStylesResource($this->formContactStyle),
-            "intro" => IntroContentsResource::collection(IntroContent::where('theme_id', $this->id)
+            'zodiacSignStyle' => new ZodiacSignStylesResource($this->zodiacSignStyle),
+            'formContactStyle' => new FormContactStylesResource($this->formContactStyle),
+            'intro' => IntroContentsResource::collection(IntroContent::where('theme_id', $this->id)
                 ->where('language_id', $languageId)
                 ->get()),
-            "sections" => SectionContentsResource::collection(SectionContent::where('theme_id', $this->id)
+            'sections' => SectionContentsResource::collection(SectionContent::where('theme_id', $this->id)
                 ->where('language_id', $languageId)
                 ->get()),
-            "sectionStyle" => SectionStylesResource::collection(
+            'sectionStyle' => SectionStylesResource::collection(
                 $this->sectionContents->flatMap(function ($section) {
                     return $section->sectionStyles;
                 })
             ),
-            "subsectionStyle" => SubSectionStylesResource::collection(
+            'subsectionStyle' => SubSectionStylesResource::collection(
                 $this->sectionContents
                     ->flatMap(function ($section) {
                         return $section->subSectionContents ?? collect();

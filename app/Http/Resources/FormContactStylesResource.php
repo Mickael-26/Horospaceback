@@ -15,9 +15,9 @@ class FormContactStylesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "colorText" => $this->color_text,
-            "colorBackground" => $this->color_background,
+            'id' => $this->id,
+            'colorText' => $this->color_text,
+            'colorBackground' => $this->color_background,
         ];
     }
 }

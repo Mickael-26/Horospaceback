@@ -19,10 +19,10 @@ class SectionContentsResource extends JsonResource
     {
         $zodiacSignId = ZodiacSign::where('name', ucfirst($request->zodiacSignName))->first()->id;
         return [
-            "id"=> $this->id,
+            'id'=> $this->id,
             'title' => $this->title,
-            "language_id" => $this->language_id,
-            "subSections" =>  SubSectionContentsResource::collection(SubSectionContent::where('section_content_id', $this->id)
+            'language_id' => $this->language_id,
+            'subSections' =>  SubSectionContentsResource::collection(SubSectionContent::where('section_content_id', $this->id)
             ->where('zodiac_sign_id', $zodiacSignId)
             ->get())
         ];

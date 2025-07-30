@@ -9,26 +9,50 @@ use App\Models\Theme;
 use App\Repositories\Theme\ThemeRepository;
 use App\Services\StoreImageService;
 use App\Http\Requests\ThemeStyleRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ThemeController extends Controller
 {
+    /**
+     * Summary of repo
+     * @var 
+     */
     protected $repo;
-
+    /**
+     * Summary of storeImageService
+     * @var 
+     */
     protected $storeImageService;
 
+    /**
+     * Summary of __construct
+     * @param \App\Repositories\Theme\ThemeRepository $repo
+     * @param \App\Services\StoreImageService $storeImageService
+     */
     public function __construct(ThemeRepository $repo, StoreImageService $storeImageService)
     {
         $this->repo = $repo;
         $this->storeImageService = $storeImageService;
     }
-    public function themeStyle()
+
+    /**
+     * Summary of themeStyle
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function themeStyle(): View
     {
         $themes = $this->repo->getAllSlugTheme();
 
-        return view("theme.theme-style", compact("themes"));
+        return view('theme.theme-style', compact('themes'));
     }
 
-    public function storeThemeStyle(ThemeStyleRequest $request)
+    /**
+     * Summary of storeThemeStyle
+     * @param \App\Http\Requests\ThemeStyleRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeThemeStyle(ThemeStyleRequest $request): RedirectResponse
     {
         $data = $request->validated();
 

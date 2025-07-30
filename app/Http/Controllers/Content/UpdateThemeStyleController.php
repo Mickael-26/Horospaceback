@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ThemeStyleRequest;
 use App\Services\StoreImageService;
 use App\Models\Theme;
+use Illuminate\Http\RedirectResponse;
 
 class UpdateThemeStyleController extends Controller
 {
@@ -29,7 +30,7 @@ class UpdateThemeStyleController extends Controller
      * @param \App\Http\Requests\ThemeStyleRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateThemeStyle(ThemeStyleRequest $request)
+    public function updateThemeStyle(ThemeStyleRequest $request): RedirectResponse
     {
         $data = $request->validated();
 

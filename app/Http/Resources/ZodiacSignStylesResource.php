@@ -15,10 +15,10 @@ class ZodiacSignStylesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "colorName" => $this->color_name,
-            "colorBackground" => $this->color_background,
-            "font" => $this->font
+            'id' => $this->id,
+            'colorName' => $this->color_name,
+            'colorBackground' => $this->color_background,
+            'font' => $this->font
         ];
     }
 }

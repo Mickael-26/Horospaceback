@@ -15,8 +15,8 @@ class AllThemesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "intro" => IntroContentsResource::collection($this->introContents),
+            'id' => $this->id,
+            'intro' => IntroContentsResource::collection($this->introContents),
             'themeContents' => ThemeContentsResource::collection($this->themeContents),
         ];
     }

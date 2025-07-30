@@ -13,7 +13,7 @@ class ExportController extends Controller
      * Summary of exportDefaultExcel
      * @return StreamedResponse
      */
-    public function exportDefaultExcel()
+    public function exportDefaultExcel(): StreamedResponse
     {
         $tables = [
             'theme_contents',
@@ -89,5 +89,4 @@ class ExportController extends Controller
             'Cache-Control' => 'max-age=0',
         ]);
     }
-   
 }

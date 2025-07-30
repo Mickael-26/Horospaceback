@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\IntroStyleRequest;
 use App\Models\Theme;
 use App\Services\StoreImageService;
+use Faker\Provider\Image;
 use Illuminate\Http\RedirectResponse;
 
 class CreateIntoStyleController extends Controller
@@ -35,7 +36,6 @@ class CreateIntoStyleController extends Controller
 
         $theme = Theme::find($data['theme_id']);
         $intro = $theme->introContents->first();
-
         if ($theme) {
             if ($intro) {
                 $intro->introStyles()->create([
@@ -47,7 +47,6 @@ class CreateIntoStyleController extends Controller
                     'font_title' => $data['font_title'],
                     'font_small_text' => $data['font_small_text'],
                     'font_year' => $data['font_year'],
-                    'img_background_mobile_intro' => $this->storeImageService->storeImageIfExists($data['img_background_mobile_intro'], 'content-intros'),
                     'img_background_intro' => $this->storeImageService->storeImageIfExists($data['img_background_intro'], 'content-intros'),
                     'img_nav' => $this->storeImageService->storeImageIfExists($data['img_nav'], 'content-intros'),
                 ]);

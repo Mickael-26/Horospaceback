@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
-class UserAccountRequest extends FormRequest
+class InfoHoroscopeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +22,17 @@ class UserAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'email' => ["required", 'email', 'unique:users,email'],
-            'password' => ['required', 'string','confirmed',Password::min(8)],
-            'role_id' => ['required', 'numeric', 'exists:roles,id']
+            'id' => ['required', 'integer', 'exists:themes,id'],
+            'zodiacSignName' => ['required', 'string'],
+            'lang' => ['required', 'string', 'in:fr,en,es,de'],
         ];
+    }
+    /**
+     * Summary of validationData
+     * @return array
+     */
+    public function validationData(): array
+    {
+        return array_merge($this->all(), $this->route()->parameters());
     }
 }

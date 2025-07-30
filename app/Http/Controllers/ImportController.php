@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImportFileRequest;
 use App\Models\FormContactStyle;
 use App\Models\IntroContent;
 use App\Models\Medias;
@@ -15,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use App\Repositories\Theme\ThemeRepository;
 use Illuminate\View\View;
+use Str;
 
 class ImportController extends Controller
 {
@@ -28,26 +30,24 @@ class ImportController extends Controller
         $categories = Category::all();
         // Récupère le dernier contenu de thème avec l'ID et le slug
         $themes = ThemeContent::select('themes.id', 'theme_contents.slug')
-            ->join('themes', 'theme_contents.theme_id', '=', "themes.id")
+            ->join('themes', 'theme_contents.theme_id', '=', 'themes.id')
             ->latest('theme_contents.id')  // Trie par le plus récent
             ->limit(1)
             ->where('theme_contents.language_id', '=', 1)  // Langue française 
             ->get();
         // Retourne la vue avec les données à afficher
-        return view("import.import-content", compact("categories", "themes"));
+        return view('import.import-content', compact('categories', 'themes'));
     }
+    
     /**
      * Summary of import
      * @param \Illuminate\Http\Request $request
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function import(Request $request)
+    public function import(ImportFileRequest $request)
     {
         // Validation des données envoyées par le formulaire
-        $data = $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls',
-            'category_id' => 'required'
-        ]);
+        $data = $request->validated();
         // Récupère l'ID de l'utilisateur connecté
         $userId = $request->user()->id;
         // Charge le fichier Excel avec PhpSpreadsheet
@@ -126,20 +126,44 @@ class ImportController extends Controller
                 $sectionTitle = isset($row[5]) ? $row[5] : null;
                 // Récupère l'ID de la section associée
                 $section_id = $sectionTitle && isset($sectionIds[$sectionTitle]) ? $sectionIds[$sectionTitle] : null;
+                // Tableau d'ID des signes astro
+                $arrayIds = $this->stringIdToArrayOfId($row[4]);
                 // Création de la sous-section
-                SubSectionContent::create([
-                    'title' => isset($row[0]) ? $this->cleanData($row[0]) : null,
-                    'sub_title' => isset($row[1]) ? $this->cleanData($row[1]) : null,
-                    'paragraph' => isset($row[2]) ? $this->cleanData($row[2]) : null,
-                    'language_id' => $this->cleanData($row[3]),
-                    'zodiac_sign_id' => $this->cleanData($row[4]),
-                    'section_content_id' => $section_id,
-                ]);
+                foreach ($arrayIds as $arrayId) {
+                    SubSectionContent::create([
+                        'title' => isset($row[0]) ? $this->cleanData($row[0]) : null,
+                        'sub_title' => isset($row[1]) ? $this->cleanData($row[1]) : null,
+                        'paragraph' => isset($row[2]) ? $this->cleanData($row[2]) : null,
+                        'language_id' => $this->cleanData($row[3]),
+                        'zodiac_sign_id' => $this->cleanData($arrayId),
+                        'section_content_id' => $section_id,
+                    ]);
+                }
             }
         }
         // Redirige vers la page précédente avec un message de succès
         return back()->with('status', 'file-imported');
     }
+
+    /**
+     * Summary of stringIdToArrayOfId
+     * @param string $listId
+     * @return array
+     */
+    private function stringIdToArrayOfId(string $listId): array
+    {
+        $array = [];
+
+        if (empty($listId)) {
+            array_push($array, 1);
+        } else {
+            $array = explode(',', $listId);
+        }
+
+
+        return $array;
+    }
+
     /**
      * Summary of formatDate
      * @param string $date
@@ -147,9 +171,9 @@ class ImportController extends Controller
      */
     private function formatDate(string $date): string
     {
-        $result = "";
+        $result = '';
         if (empty($date)) {
-            $data = date("Y-m-d");
+            $data = date('Y-m-d');
             $result = $data;
         } else {
             if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $date)) {
@@ -176,6 +200,7 @@ class ImportController extends Controller
         }
         return $result;
     }
+
     /**
      * Summary of cleanData
      * @param string $data
@@ -192,6 +217,7 @@ class ImportController extends Controller
         // Trim
         return trim($data);
     }
+
     /**
      * Summary of createFormContactStyle
      * @return int
@@ -199,8 +225,8 @@ class ImportController extends Controller
     private function createFormContactStyle(): int
     {
         $form = FormContactStyle::create([
-            'color_text' => "#000000",
-            'color_background' => "#fff"
+            'color_text' => '#000000',
+            'color_background' => '#fff'
         ]);
         return $form->id;
     }
@@ -212,9 +238,9 @@ class ImportController extends Controller
     private function createZodiacSignStyle(): int
     {
         $zodiacStyle = ZodiacSignStyle::create([
-            'color_background' => "#000000",
-            'color_name' => "#fff",
-            'font' => "Arial"
+            'color_background' => '#000000',
+            'color_name' => '#fff',
+            'font' => 'Arial'
         ]);
         return $zodiacStyle->id;
     }
@@ -226,7 +252,7 @@ class ImportController extends Controller
     private function createMedias(): int
     {
         $media = Medias::create([
-            'img_theme' => "default"
+            'img_theme' => 'default'
         ]);
         return $media->id;
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\InfoHoroscopeRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\FormContactStylesResource;
 use App\Http\Resources\IntroContentsResource;
@@ -23,7 +24,6 @@ use Illuminate\Http\JsonResponse;
 
 class ApiHoroscopeController extends Controller
 {
-    public function getAllTheme() {}
     /**
      * Summary of getTheme
      * @param int $id
@@ -31,23 +31,15 @@ class ApiHoroscopeController extends Controller
      * @param string $lang
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function getTheme(int $id, string $zodiacSignName, string $lang,): JsonResponse
+    public function getTheme(InfoHoroscopeRequest $request): JsonResponse
     {
-
-        $validated = validator([
-            "id" => $id,
-            "lang" => $lang,
-            "zodiacSignName" => $zodiacSignName
-        ], [
-            "id" => ['required', 'integer', 'exists:themes,id'],
-            'zodiacSignName' => ['required', 'string'],
-            "lang" => ['required', 'string', 'in:fr,en,es,de'],
-        ])->validate();
-
+        
+        $validated = $request->validated();
+      
         $languageId = Language::where('code', $validated['lang'])->first()->id;
         $themeId = Theme::find($validated['id']);
 
-        if ($themeId->status != "active") {
+        if ($themeId->status != 'active') {
             return response()->json([
                 'message' => 'No data found'
             ]);

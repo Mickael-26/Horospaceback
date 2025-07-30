@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
-class UserAccountRequest extends FormRequest
+class ImportFileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +22,8 @@ class UserAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'email' => ["required", 'email', 'unique:users,email'],
-            'password' => ['required', 'string','confirmed',Password::min(8)],
-            'role_id' => ['required', 'numeric', 'exists:roles,id']
+            'file' => 'required|file|mimes:xlsx,xls',
+            'category_id' => 'required'
         ];
     }
 }

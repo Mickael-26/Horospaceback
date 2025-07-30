@@ -16,17 +16,17 @@ class SectionStylesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"=> $this->id,
-            "sectionName" => SectionContent::select('section_contents.title')
+            'id'=> $this->id,
+            'sectionName' => SectionContent::select('section_contents.title')
                 ->where('id', $this->section_content_id)
                 ->first()
                 ->title ?? null,
-            "colorBackground" => $this->color_background,
-            "colorTitle" => $this->color_title,
-            "imagBackground" => $this->img_background,
-            "fontTitle" => $this->font_title,
-            "imgSection" => $this->img_section,
-            "SectionContentId" => $this->section_content_id,
+            'colorBackground' => $this->color_background,
+            'colorTitle' => $this->color_title,
+            'imagBackground' => $this->img_background,
+            'fontTitle' => $this->font_title,
+            'imgSection' => $this->img_section,
+            'SectionContentId' => $this->section_content_id,
 
         ];
     }

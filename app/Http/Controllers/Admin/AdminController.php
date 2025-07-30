@@ -11,18 +11,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserAccountRequest;
+use Illuminate\View\View;
 
 class AdminController extends Controller
 {
   
-    public function account(Request $request)
+    /**
+     * Summary of account
+     * @param \Illuminate\Http\Request $request
+     * @return RedirectResponse|\Illuminate\Contracts\View\View
+     */
+    public function account(Request $request): RedirectResponse|View
     {
-        if(!Gate::allows("admin",Auth::user() )){
+        if(!Gate::allows('admin',Auth::user() )){
             return back();
         }
         $roles = Role::havingBetween('id', [2,3])->groupBy(['name', 'id'])->get();
 
-        return view("admin.add-account", compact("roles"));
+        return view('admin.add-account', compact('roles'));
     }
     /**
      * Summary of delete
@@ -33,7 +39,7 @@ class AdminController extends Controller
     {
         $user->delete();
 
-        return back()->with("success","user-deleted");
+        return back()->with('success','user-deleted');
     }
 
     /**
@@ -46,12 +52,12 @@ class AdminController extends Controller
         $data = $request->validated();
 
         $user = User::create([
-            "name" => $data["name"],
-            "email"=> $data["email"],
-            "password" => Hash::make($data["password"]),
-            "role_id" => $data["role_id"]
+            'name' => $data['name'],
+            'email'=> $data['email'],
+            'password' => Hash::make($data['password']),
+            'role_id' => $data['role_id']
         ]);
 
-        return back()->with("status","account-added");
+        return back()->with('status','account-added');
     }
 }

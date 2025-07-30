@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserAccountRequest;
+use App\Enums\UserRole;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -23,10 +24,11 @@ class AdminController extends Controller
      */
     public function account(Request $request): RedirectResponse|View
     {
-        if(!Gate::allows('admin',Auth::user() )){
+        $roleUser = UserRole::tryFrom($request->user()->role_id);
+        if(!$roleUser->isAdmin()){
             return back();
         }
-        $roles = Role::havingBetween('id', [2,3])->groupBy(['name', 'id'])->get();
+        $roles = Role::havingBetween('id', [UserRole::EDITOR->value,UserRole::SUPERVISOR->value])->groupBy(['name', 'id'])->get();
 
         return view('admin.add-account', compact('roles'));
     }

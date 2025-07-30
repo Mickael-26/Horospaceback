@@ -6,7 +6,7 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            @if (Auth::user()->role->name != 'admin')
+            @if (!Auth::user()->admin())
                 @foreach ($themes as $theme)
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg my-5">
                         <div class="p-6 text-gray-900">
@@ -17,7 +17,7 @@
                             <div class="text-center py-2 flex flex-wrap justify-center items-center gap-3">
                                 <a href="{{ route('update-content.index', $theme->theme_id) }}"
                                     class="inline-flex items-center my-2 px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">{{ __('Update content style') }}</a>
-                                @if (Auth::user()->role->name === 'supervisor')
+                                @if (Auth::user()->supervisor())
                                     <form action="{{ route('dashboard.delete-theme', $theme->theme_id) }}"
                                         method="POST">
                                         @method('DELETE')

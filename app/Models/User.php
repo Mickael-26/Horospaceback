@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -58,4 +60,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Theme::class);
     }
+    public function admin(): bool
+    {
+        return $this->role->name === UserRole::ADMIN->label();
+    }
+
+    public function editor(): bool
+    {
+        return UserRole::tryFrom($this->role->id)->isEditor();
+    }
+
+    public function supervisor(): bool
+    {
+        return UserRole::tryFrom($this->role->id)->isSupervisor();
+    }
+
 }
